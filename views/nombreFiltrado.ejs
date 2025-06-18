@@ -1,0 +1,43 @@
+<%-include("./partials/header.ejs", { mostrarBoton3: false })%>
+<div>
+  <form action="buscarCliente" method="post">
+    <div class="col-sm-4" >
+    <div class="input-group">
+  <input type="text" class="form-control" name="filtro" placeholder="Inserte Nombre, Correo o RFC">
+  <span class="input-group-btn"></span>
+  <button type="submit" class="btn btn-outline-primary btn-sm" name="filtro">Filtrar</button>
+</div> 
+</div>
+</form>
+
+</div>
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">RFC</th>
+            <th scope="col">email</th>
+            <th scope="col">Seguimiento</th>
+          </tr>
+        </thead>
+        <tbody>
+            <% let a=size; %>
+    <% for(let i=0; i < a; i++) {%>
+        <form action="usarCliente" method="post">
+            <tr>
+                <!-- <th scope="row">1</th> -->
+                <td><%= cliente[i].id %></td>
+                <td><%= cliente[i].nombre %></td>
+                <td><%= cliente[i].rfc %></td>
+                <td><%= cliente[i].email %></td>
+                <td><button name="clienteSelecButton" value="<%= cliente[0].id %>">Usar</button></td>
+              </tr>
+            </form>
+            <%}%>
+
+</tbody>
+</table>
+
+<%-include("./partials/footer.ejs")%>

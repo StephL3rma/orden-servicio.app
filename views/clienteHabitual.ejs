@@ -1,0 +1,47 @@
+<%-include("./partials/header.ejs", { mostrarBoton3: false })%>
+<div>
+  
+  <form action="buscarCliente" method="post">
+    <%if (locals.notFound){%>
+      <span style="color: red;">  Cliente no encontrado, Busque de nuevo </span>
+      <%}%>
+    <div class="col-sm-6" >
+    <div class="input-group">
+  <input type="text" class="form-control" name="filtro" placeholder="Inserte Nombre, Correo o RFC">
+  <span class="input-group-btn"></span>
+  <button type="submit" class="btn btn-outline-primary btn-sm" name="filtro">Filtrar</button>
+</div> 
+</div>
+</form>
+
+</div>
+<br>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">RFC</th>
+            <th scope="col">email</th>
+            <th scope="col">Seguimiento</th>
+          </tr>
+        </thead>
+        <tbody>
+    <% let a=size; %>
+    <% for(let i=0; i < a; i++) {%>
+        <form action="usarCliente" method="post">
+            <tr>
+                <!-- <th scope="row">1</th> -->
+                <td><%= clientes[i].id %></td>
+                <td><%= clientes[i].nombre %></td>
+                <td><%= clientes[i].rfc %></td>
+                <td><%= clientes[i].email %></td>
+                <td><button name="clienteSelecButton" value="<%= clientes[i].id %>" class="w-100 btn btn-outline-primary btn-sm">Usar</button></td>
+              </tr>
+            </form>
+    <%}%>
+
+</tbody>
+</table>
+
+<%-include("./partials/footer.ejs")%>

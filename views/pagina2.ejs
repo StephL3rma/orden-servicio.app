@@ -1,0 +1,118 @@
+<%-include('./partials/header.ejs', { mostrarBoton3: true }); %>
+
+      <p class="lead">Seguimiento</p>
+    </div>
+
+    <div class="py-5"> 
+      
+      <div class="col-md-10 col-lg-12" style="margin-left: 20px" style="margin-right: 30px;">
+          <h3  style="color: #1b8dd0;"> Cliente: <%=clienteActual%></h3>
+            <h4 style="color: #1b8dd0;" name="folio" value="<%=folio%>"> Folio de orden: <%=folio%></h4>
+        <br>
+        <h4 class="mb-3">Tipo de servicio</h4>
+        <form class="needs-validation" action="pagina3" method="post">
+          <div class="row g-3">
+          <!-- Cola de pagina1.ejs valores seleccionados -->
+          <input type="hidden" class="form-control" name="folio" value="<%= folio%>">
+          <!-- fin cola de pagina1.ejs valores seleccionados -->
+           <!-- Cola de historialPendientes.ejs valores seleccionados -->
+           <input type="hidden" class="form-control" name="clienteActual" value="<%= clienteActual%>">
+          <input type="hidden" class="form-control" name="idCliente" value="<%= idCliente%>"> 
+          <input type="hidden" class="form-control" name="create_at" value="<%= create_at%>"> 
+          <!-- fin cola de historialPendientes.ejs valores seleccionados -->
+            <div class="checkbox mb-3"> 
+             <label >
+               <input type="checkbox" name="checkBox[]" value="1" > Recolección <br>
+               <input type="checkbox" name="checkBox[]" value="2" > Diagnóstico <br>
+               <input type="checkbox" name="checkBox[]" value="3" > Mantenimiento <br>
+               <input type="checkbox" name="checkBox[]" value="4" > Puesta en marcha <br>
+               <input type="checkbox" name="checkBox[]" value="5" > Reparación <br>
+               <input type="checkbox" name="checkBox[]" value="6" > Instalación <br>
+               <input type="checkbox" name="checkBox[]" value="7" > Otro <br>
+             </label>
+            </div>
+            
+            <h4 class="mb-3">Especificaciones técnicas del equipo</h4>
+
+            <div class="col-md-4">
+              <label for="state" class="form-label">Tipo de Equipo</label>
+              <select class="form-select" id="Tipo" name="tipo">
+                <option disabled selected>Selecciona una opción</option>
+                <option value="1">CENTRO DE LAVADO</option>
+                <option value="2">CENTRO DE SECADO</option>
+                <option value="3">SENCILLA</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label for="state" class="form-label">Marca</label>
+              <select class="form-select" id="Marca" name="marca">
+                <option disabled selected>Selecciona una opción</option>
+                <option value="1">ADC</option>
+                <option value="2">DANUBE</option>
+                <option value="3">LG</option>
+                <option value="4">MYTAG</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label for="Modelo" class="form-label">Modelo</label>
+              <input type="text" class="form-control" name="modelo">
+            </div>
+
+            <div class="col-md-3">
+              <label for="" class="form-label">Número de serie</label>
+              <input type="" class="form-control" id="serie" name="serie" placeholder="">
+            </div>
+
+            <div class="col-md-3">
+              <label for="" class="form-label">Voltaje</label>
+              <input type="number" step="any" inputmode="decimal" pattern="[0-9]*" class="form-control" id="voltaje" name="voltaje">
+            </div>
+
+            <div class="col-md-3">
+              <label for="" class="form-label">Amperaje</label>
+              <input type="number" step="any" inputmode="decimal" pattern="[0-9]*" class="form-control" name="amperaje">
+            </div>
+
+            <div class="col-md-3">
+              <label for="" class="form-label">Watss</label>
+              <input type="number" step="any" inputmode="decimal" pattern="[0-9]*" class="form-control" name="watts">
+            </div>
+
+            <div class="col-md-3">
+              <label for="" class="form-label">Presion de agua</label>
+              <input type="number" step="any" inputmode="decimal" pattern="[0-9]*"  class="form-control" name="presion">
+            </div>
+
+            <h4 class="mb-3">Detalles de la orden de servicio</h4>
+
+            <div class="col-md-4">
+              <input type="hidden" class="form-control" name="encargado" id="userTecnico" placeholder="<%=usuario%>" value="<%=usuario%>">
+              <h5 style="color: #1b8dd0;" >Tecnico encargado: <%=usuario%></h5>
+            </div>
+
+
+            <div class="col-12">
+              <label for="" class="form-label">Falla reportada</label>
+              <input type="" class="form-control" name="fallas">
+            </div>
+
+            <div class="col-12">
+              <label for="" class="form-label">Trabajo realizado y descripción del mismo</label>
+              <input type="" class="form-control" name="descripcion">
+            </div>
+
+          </div>
+
+          <hr class="my-4">
+
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Continuar</button>
+        </form>
+      </div>
+    </div>
+     <script>
+    document.getElementById('valorOculto').value = document.getElementById('userTecnico').value; //para pasar valor tecnico de este doc a mi header al presionar volver a inicio
+</script>
+  </main>
+  <%-include('./partials/footer.ejs') %>    

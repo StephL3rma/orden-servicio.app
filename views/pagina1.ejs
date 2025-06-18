@@ -1,0 +1,99 @@
+<%-include('./partials/header.ejs', { mostrarBoton3: false }) %>
+
+      <p class="lead">Orden de servicio Grupo Estrella</p>
+    </div>
+
+    <div class="py-5"> 
+      
+      <div class="col-md-10 col-lg-12" style="margin-left: 20px" style="margin-right: 30px;">
+        <h4 class="mb-3">Direccion de servicio</h4>
+        
+        <h4 class="py-5 text-center">Crear cliente</h4>
+        <form action="guardarOrden" method="post">
+          <div class="row g-3">
+            <div class="col-12">
+              <label for="nombreCliente" class="form-label">Nombre del Cliente</label>
+              <input type="text" class="form-control" name="nombreCliente" placeholder="" value="" required> <!--oninvalid="this.setCustomValidity('Este campo es requerido')"  no permite rellenar el campo una vez el error sale-->
+            </div>
+            <div class="col-12">
+              <label for="idCliente" class="form-label" style="color: #14a396;">Id de Cliente: <%= nuevoCliente %></label>
+              <input type="hidden" class="form-control" name="idCliente" value="<%= nuevoCliente %>">
+            </div>
+          
+            <div class="col-12">
+              <label for="correo" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" name="correo" placeholder="you@example.com">
+            </div>
+          
+            <div class="col-12">
+              <label for="RFC" class="form-label">RFC</label>
+              <input type="text" maxlength="13" class="form-control" name="rfc">
+            </div>
+          
+            <div class="col-sm-6">
+              <label for="calle" class="form-label">Calle/número</label>
+              <input type="text" class="form-control" name="calle" placeholder="calle">
+            </div>
+          
+            <div class="col-sm-6">
+              <label for="numeroInterior" class="form-label">Número interior</label>
+              <input type="text" class="form-control" name="numeroInterior">
+            </div>
+          
+            <div class="col-12">
+              <label for="colonia" class="form-label">Colonia/Localidad</label>
+              <input type="text" class="form-control" name="colonia">
+            </div>
+          
+            <div class="col-md-3">
+              <label for="cPostal" class="form-label">Código Postal</label>
+              <input type="text" class="form-control" name="cPostal" >
+            </div>
+         
+            <div class="col-md-3">
+              <label for="telefono" class="form-label">Teléfono</label>
+              <input type="text" class="form-control" name="telefono" required>
+            </div>
+          
+            <div class="col-md-4">
+              <label class="form-label">Ciudad</label>
+              <select class="form-select" name="ciudad" placeholder="Choose...">
+                <option value="" style="color: #999;">Seleccione una opción</option>
+                <%-include('./partials/estados.ejs') %>
+              </select>
+            </div>
+          
+            <div class="col-12">
+              <label class="form-label">Referencia de dirección</label>
+              <input type="text" class="form-control" name="referenciaDireccion">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Referencia de Servicio</label>
+              <input type="text" class="form-control" name="referenciaServicio">
+            </div>
+          </div>
+        
+          <hr class="my-4">
+        
+          <div class="row g-3">
+            <div class="col-sm-4">
+              <label class="form-label"> Folio d Orden: <%= nuevoFolio %></label>
+              <input type="hidden" name="nuevoFolio" value=" <%= nuevoFolio %>">
+            </div>
+            <div class="col-sm-4">
+              <label class="form-label">Fecha: <%= hoy %></label>
+              <input type="hidden" name="valorLabel" value=" <%= hoy %>">
+            </div>
+            <div class="col-sm-4">
+              <label class="form-label">Estado: Abierto </label>
+              <input type="hidden" name="estado" value="Abierto">
+            </div>
+          </div>
+          <br>
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <%-include('./partials/footer.ejs') %>

@@ -1,0 +1,35 @@
+<%-include("./partials/header.ejs", { mostrarBoton3: false }) %>
+          <p class="lead">Menú</p>
+        </div>
+
+        <div class="py-5">
+            <form action="historial" method="post">
+            <button class="w-100 btn btn-outline-primary btn-lg" type="submit"> <!-- Historial (Cerrados, pendientes y modificar)-->
+                Historial de Ordenes
+            </button>
+            </form>
+        </div>
+        <div class="py-5">
+            <form action="crearHabitual" method="post">
+                <button class="w-100 btn btn-outline-primary btn-lg" type="submit">
+                    Crear orden con cliente habitual
+                </button>
+            </form>
+        </div>
+
+        <div class="py-5">
+            <form action="crear" method="post">
+                <button class="w-100 btn btn-outline-primary btn-lg" type="submit">
+                    Crear orden con cliente nuevo
+                </button>
+            </form>
+        </div>
+         <div class="py-5">
+            <form action="crearUsuario" method="post">
+                <button class="w-100 btn btn-outline-primary btn-lg" type="submit">
+                    Crear Usuario Administrador o Técnico
+                </button>
+            </form>
+        </div>
+
+<%-include("./partials/footer.ejs") %>

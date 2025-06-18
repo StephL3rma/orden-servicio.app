@@ -1,0 +1,44 @@
+<%-include("./partials/header.ejs", { mostrarBoton3: false })%>
+<h3>Historial de Ordenes</h3>
+<br>
+<div>
+  <form action="filtrado" method="post"> 
+    <%if (locals.notFound){%>
+      <span style="color: red;">  Folio no encontrado, Busque de nuevo </span>
+      <%}%>
+    <div class="col-sm-3" >
+    <div class="input-group">
+  <input  class="form-control" name="filtro" placeholder="Inserte Folio o Nombre">
+  <span class="input-group-btn"></span>
+  <button type="submit"  class="btn btn-outline-primary btn-sm">Filtrar</button>
+</div> 
+</div>
+</form>
+
+</div>
+<br>
+   <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Fecha Día-Mes-Año</th>
+        <th scope="col">Folio</th>
+        <th scope="col">Cliente</th>
+        <th scope="col">Seguimiento</th>
+      </tr>
+    </thead>
+    <tbody>
+        <% let i= totalFilas;%>
+        <% for(let a=0; a < i; a++){%>
+            <tr>
+                <!-- <th scope="row">1</th> -->
+                <td><%= historial[a].create_at %></td>
+                <td><%= historial[a].id %></td>
+                <td><%= historial[a].nombre%></td>
+                <td><%= historial[a].estado%></td>
+              </tr>
+        <% } %>
+
+    </tbody>
+  </table>
+
+<%-include("./partials/footer.ejs")%>

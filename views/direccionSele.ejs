@@ -1,0 +1,123 @@
+<%-include('./partials/header.ejs', { mostrarBoton3: false }) %>
+
+        <p class="lead">Orden de servicio Grupo Estrella</p>
+    </div>
+
+    <div class="py-5"> 
+      
+      <div class="col-md-10 col-lg-12" style="margin-left: 20px" style="margin-right: 30px;">
+        <h4 class="mb-3">Direccion de servicio</h4>
+
+   <div class="col-md-4">
+              <label for="state" class="form-label">Direcciones</label>
+              <%let sizeSelectedUnos=sizeSelectedUno;%>
+              <% console.log("pero aqui es",sizeSelectedUnos);%>
+          <% for(let i=0; i < sizeSelectedUnos; i++){%>
+             <form action="direccionSele" method="post">
+               <input type="hidden" name="nuevoCliente" value=" <%= nuevoCliente %>">
+               <%= console.log("envio cliente actual",nuevoCliente);%>
+              <input type="hidden" name="botonMaster" value="<%= arrayClienteSelected[i].id %>">
+              <%= console.log("ID ireccion cliente actual es: ",arrayClienteSelected[i].id);%>
+              <input type="hidden" name="opcionPresionada" value="<%= i %>">
+              <%= console.log("opcion Presionada en clienteHabitual es: ", i);%>
+              
+               <button class="w-100 btn btn-outline-primary btn-sm" style="text-align: left;" type="submit" >Colonia: <%= arrayClienteSelected[i].colonia_localidad %></button> 
+              </form>
+          <% }%>
+          
+            </div>
+
+        
+        <h4 class="py-5 text-center">Cliente Actual: </h4>
+        <form action="guardarOrdenHabitual" method="post">
+
+
+          
+
+
+          <div class="row g-3">
+            <div class="col-12">
+              <label for="nombreCliente" class="form-label">Nombre del Cliente</label>
+              <input type="text" class="form-control" name="nombreCliente" value="<%= arrayClienteSelectedFinal.nombre%>"required> <!--oninvalid="this.setCustomValidity('Este campo es requerido')"  no permite rellenar el campo una vez el error sale-->
+            </div>
+            <div class="col-12">
+              <label for="idCliente" class="form-label" style="color: #14a396;">Id de Cliente: <%= nuevoCliente %></label>
+              <input type="hidden" class="form-control" name="idCliente" value="<%= nuevoCliente %>">
+            </div>
+            <div class="col-12">
+                <label for="correo" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control" name="correo" value="<%= arrayClienteSelectedFinal.email %>">
+              </div>
+
+            <div class="col-12">
+                <label for="RFC" class="form-label">RFC</label>
+                <input type="text" class="form-control" name="rfc" value="<%= arrayClienteSelectedFinal.rfc %>" >
+              </div>
+          
+            <div class="col-sm-6">
+              <label for="calle" class="form-label">Calle/número</label>
+              <input type="text" class="form-control" name="calle" value="<%= arrayClienteSelectedFinal.calle_num_ext %>">
+            </div>
+          
+            <div class="col-sm-6">
+              <label for="numeroInterior" class="form-label">Número interior</label>
+              <input type="text" class="form-control" name="numeroInterior" value="<%= arrayClienteSelectedFinal.no_int %>">
+            </div>
+          
+            <div class="col-12">
+              <label for="Colonia" class="form-label">Colonia/Localidad</label>
+              <input type="text" class="form-control" name="Colonia" value="<%= arrayClienteSelectedFinal.colonia_localidad%>">
+            </div>
+          
+            <div class="col-md-3">
+              <label for="cPostal" class="form-label">Código Postal</label>
+              <input type="text" class="form-control" name="cPostal" value="<%= arrayClienteSelectedFinal.codigo_postal %>">
+            </div>
+         
+            <div class="col-md-3">
+              <label for="telefono" class="form-label">Teléfono</label>
+              <input type="text" class="form-control" name="telefono" value="<%= arrayClienteSelectedFinal.telefono %>" required>
+            </div>
+          
+            <div class="col-md-4">
+              <label for="ciudad" class="form-label">Ciudad</label>
+              <select class="form-select" name="ciudad" value="<%= arrayClienteSelectedFinal.ciudad %>">
+                <option value="" style="color: #999;"><%= arrayClienteSelectedFinal.ciudad %></option>
+                <%-include('./partials/estados.ejs') %>
+              </select>
+            </div>
+          
+            <div class="col-12">
+              <label for="zip" class="form-label">Referencia de dirección</label>
+              <input type="text" class="form-control" name="referencia" value="<%= arrayClienteSelectedFinal.referencia_dir %>">
+            </div>
+            <div class="col-12">
+                <label for="zip" class="form-label">Referencia de Servicio</label>
+                <input type="text" class="form-control" name="referencia">
+              </div>
+          </div>
+        
+          <hr class="my-4">
+        
+          <div class="row g-3">
+            <div class="col-sm-4">
+              <label for="folio" class="form-label"> Folio d Orden: <%= nuevoFolio %></label>
+              <input type="hidden" id="valorLabel" name="nuevoFolio" value=" <%= nuevoFolio %>">
+            </div>
+            <div class="col-sm-4">
+              <label for="fecha" class="form-label">Fecha: <%= hoy %></label>
+              <input type="hidden" id="valorLabel" name="valorLabel" value=" <%= hoy %>">
+            </div>
+            <div class="col-sm-4">
+              <label for="fecha" class="form-label">Estado: Abierto </label>
+              <input type="hidden" id="valorLabel" name="estado" value="Abierto">
+            </div>
+          </div>
+          <br>
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <%-include('./partials/footer.ejs') %>

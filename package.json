@@ -1,0 +1,29 @@
+{
+  "name": "orden-de-servicio",
+  "version": "1.0.0",
+  "description": "Ordenes de servicio para grupo estrella",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jonathan garcia",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^2.2.0",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "multer": "^1.4.5-lts.2",
+    "nodemailer": "^7.0.2",
+    "nodemon": "^3.1.9",
+    "pdfkit": "^0.17.0",
+    "pdfkit-form": "^0.1.2",
+    "pg": "^8.14.1",
+    "sharp": "^0.34.1",
+    "signature_pad": "^5.0.7"
+  }
+}

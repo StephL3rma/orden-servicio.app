@@ -1,0 +1,34 @@
+<%-include("./partials/header.ejs", { mostrarBoton3:false })%>
+<p>Ordenes Pendientes</p>
+<h3  style="color: #1b8dd0;"> Técnico: <%=usuario%></h3>
+<br>
+   <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Fecha Día-Mes-Año</th>
+        <th scope="col">Folio</th>
+        <th scope="col">Cliente</th>
+        <th scope="col">Estatus</th>
+        <th scope="col">Seguimiento</th>
+      </tr>
+    </thead>
+    <tbody>
+        <% let a= totalFilas;%>
+        <% for(let i=0; i < a; i++){%>
+          <form action="seguimiento" method="post">
+            <input type="hidden" name="usuario" value="<%=usuario%>">
+            <tr>
+                <!-- <th scope="row">1</th> -->
+                <td><%= historialPendientes[i].create_at %></td>
+                <td><%= historialPendientes[i].id %></td>
+                <td><%= historialPendientes[i].nombre%></td>
+                <td><%= historialPendientes[i].estado%></td>
+                <td><button name="seguimiento" value="<%= JSON.stringify(historialPendientes[i])%>" class="w-100 btn btn-outline-primary btn-sm" >Hacer</button></td>
+              </tr>
+            </form>
+        <% } %>
+
+    </tbody>
+  </table>
+
+<%-include("./partials/footer.ejs")%>

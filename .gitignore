@@ -1,0 +1,18 @@
+# Ignorar carpeta de dependencias
+node_modules/
+
+# Archivos de logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivo de configuración sensible
+config.env
+
+# Archivos de sistema (macOS, Windows)
+.DS_Store
+Thumbs.db
+
+# Directorios temporaless
+tmp/
+temp/

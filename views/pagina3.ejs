@@ -1,0 +1,196 @@
+<%-include('./partials/header.ejs', { mostrarBoton3: true }) %>
+
+      <p class="lead">Seguimiento</p>
+    </div>
+    <div class="py-5">   
+      <div class="col-md-10 col-lg-12" style="margin-left: 20px" style="margin-right: 30px;">
+        <form class="needs-validation" action="enviarOrden" method="post" enctype="multipart/form-data">
+          <!-- Cola de pagina1.ejs valores seleccionados -->
+          <input type="hidden" class="form-control" name="create_at" value="<%= create_at%>">
+          <input type="hidden" class="form-control" name="idCliente" value="<%= idCliente%>">
+          <input type="hidden" class="form-control" name="clienteActual" value="<%= clienteActual %>">
+          <input type="hidden" class="form-control" name="folio" value="<%= folio%>">
+          <% checkSelectedo.forEach(function(valor) { %>
+          <input type="hidden" name="checkSelectedo[]" value="<%= valor %>">
+          <% }); %>
+          <input type="hidden" class="form-control" name="tipo" value="<%= tipo%>">
+          <input type="hidden" class="form-control" name="marca" value="<%= marca%>">
+          <input type="hidden" class="form-control" name="modelo" value="<%=modelo %>">
+          <input type="hidden" class="form-control" name="serie" value="<%=serie %>">
+          <input type="hidden" class="form-control" name="voltaje" value="<%= voltaje%>">
+          <input type="hidden" class="form-control" name="amperaje" value="<%= amperaje%>">
+          <input type="hidden" class="form-control" name="watts" value="<%= watts%>">
+          <input type="hidden" class="form-control" name="presion" value="<%=presion %>">
+          <input type="hidden" class="form-control" name="encargado" id="userTecnico" value="<%=encargado %>">
+          <input type="hidden" class="form-control" name="fallas" value="<%=fallas %>">
+          <input type="hidden" class="form-control" name="descripcion" value="<%= descripcion%>">
+          <!-- fin cola de pagina1.ejs valores seleccionados -->
+          <div class="row g-3">
+
+            <h4 class="mb-3">Especificaciones técnicas del equipo</h4>
+          <form id="miFormulario" method="post" action="/tu-ruta"></form>
+           
+            <div id="partesUtilizadas">
+              <%
+    /*
+            <div class="col-8">
+              <label class="form-label">Número de cada parte utilizada</label>
+              <input type="text" class="form-control" name="parteUtilizada" required>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Repuestos necesitados</label>
+              <input type="number" class="form-control" name="repuestosUsados">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Descripción de la pieza</label>
+              <input type="text" class="form-control" name="descripcionPieza">
+            </div>
+             */
+    %>
+           </div>
+           
+          <button type="button" id="agregarParte">Agregar Parte Utilizada</button>
+
+          <hr class="my-4">
+
+          <div class="col-12">
+            <div class="form-group">
+                <label>Subir imagen:</label>
+                <input type="file" name="imagenSelected" accept="image/*" class="form-control">
+              </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group">
+            <label class="form-label">Comentarios adicionales</label>
+            <input type="text" class="form-control" name="comentarios">
+          </div>  
+          </div>
+
+          <hr class="my-4">
+
+          <div class="alert alert-secondary text-center fw-bold p-4 shadow-lg rounded">
+            <h5 class="mb-3 text-uppercase"><strong>CLIENTE/USUARIO:</strong></h5>
+            <p class="mb-0">
+              SE ME INDICÓ EL PROBLEMA DEL EQUIPO Y LA REPARACIÓN DESCRITA EN LA
+              ORDEN DE SERVICIO. SE ME MOSTRARON LAS REFACCIONES NUEVAS A UTILIZARSE
+              QUEDANDO EL EQUIPO FUNCIONANDO Y A MI ENTERA SATISFACCIÓN.
+            </p>
+          </div>
+    
+           <!-- Sección 9: Firmas -->
+           <div class="card mb-3">
+            <div class="card-header bg-azul-rey text-white">FIRMAS</div>
+            <div class="card-body text-center">
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="form-label">Firma del técnico</label>
+                  <canvas id="signature-padTecnico" class="firma-canvas border" width="300" height="150" name="canvaTecnicoFirma"></canvas>
+                  <br />
+                  <button type="button" id="clearTecnico" class="btn btn-danger btn-sm mt-2">
+                    Borrar firma
+                  </button> 
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Firma del cliente</label>
+                  <canvas id="signature-padCliente" class="firma-canvas border" width="300" height="150" name="canvaClienteFirma"></canvas>
+                  <br />
+                  <button type="button" id="clearCliente" class="btn btn-danger btn-sm mt-2">
+                    Borrar firma
+                  </button>
+                 
+                </div>
+              </div>
+              
+            </div>
+         
+          </div>
+          
+          <button class="w-100 btn btn-primary btn-lg" type="submit" id="saveAll">Enviar Orden</button>
+
+          
+        </form>
+      </div>
+    </div>
+  </main>
+ 
+ <script src="/js/signature-pad.js"></script>
+ <script>
+  let contador = 0; 
+  document.getElementById('agregarParte').addEventListener('click', function() {
+    const partesUtilizadasDiv = document.getElementById('partesUtilizadas');
+    const nuevaParte = document.createElement('div');
+    nuevaParte.classList.add('parte-utilizada');
+    
+    const labelNumero = document.createElement('label');
+    labelNumero.textContent = 'Número: ';
+    const inputNumero = document.createElement('input');
+    inputNumero.type = 'text';
+    inputNumero.name = `partesUtilizadas[${contador}][numero]`;
+    inputNumero.required = true;
+    inputNumero.classList.add('input-estilo');
+    inputNumero.placeholder = 'Ingrese el número';
+    
+    const labelRepuesto = document.createElement('label');
+    labelRepuesto.textContent = 'Cantidad: ';
+    const inputRepuesto = document.createElement('input');
+    inputRepuesto.type = 'number';
+    inputRepuesto.pattern="[0-9]*";
+    inputRepuesto.name = `partesUtilizadas[${contador}][repuesto]`;
+    inputRepuesto.required = true;
+    inputRepuesto.classList.add('input-estilo');
+    inputRepuesto.placeholder = 'cantidad de respuestos';
+    
+    const labelDescripcion = document.createElement('label');
+    labelDescripcion.textContent = 'Descripción: ';
+    const inputDescripcion = document.createElement('input');
+    inputDescripcion.type = 'text';
+    inputDescripcion.name = `partesUtilizadas[${contador}][descripcion]`;
+    inputDescripcion.required = true;
+    inputDescripcion.classList.add('input-estilo');
+    inputDescripcion.placeholder = 'Ingrese la descripción';
+    
+    const botonEliminar = document.createElement('button');
+    botonEliminar.type = 'button';
+    botonEliminar.textContent = 'Eliminar';
+    botonEliminar.onclick = function() {
+      partesUtilizadasDiv.removeChild(nuevaParte);
+    };
+    
+    nuevaParte.appendChild(labelNumero);
+    nuevaParte.appendChild(inputNumero);
+    nuevaParte.appendChild(document.createElement('br')); 
+    nuevaParte.appendChild(document.createElement('br'));
+
+    nuevaParte.appendChild(labelRepuesto);
+    nuevaParte.appendChild(inputRepuesto);
+    nuevaParte.appendChild(document.createElement('br'));
+    nuevaParte.appendChild(document.createElement('br'));
+    
+    nuevaParte.appendChild(labelDescripcion);
+    nuevaParte.appendChild(inputDescripcion);
+    nuevaParte.appendChild(botonEliminar);
+    nuevaParte.appendChild(document.createElement('br'));
+    nuevaParte.appendChild(document.createElement('br'));
+    nuevaParte.appendChild(document.createElement('br'));
+
+    partesUtilizadasDiv.appendChild(nuevaParte);
+    contador++;
+  });
+</script>
+  <script>
+    document.getElementById('valorOculto').value = document.getElementById('userTecnico').value; //para pasar valor tecnico de este doc a mi header al presionar volver a inicio
+</script>
+<style>
+  .input-estilo {
+    width: 300px;
+    height: 30px;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+</style>
+
+  <%-include('./partials/footer.ejs') %>
