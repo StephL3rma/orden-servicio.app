@@ -6,13 +6,28 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Archivo de configuración sensible
+# Archivos de configuración sensible
 config.env
+config.env.local
 
 # Archivos de sistema (macOS, Windows)
 .DS_Store
 Thumbs.db
 
-# Directorios temporaless
+# Directorios temporales
 tmp/
 temp/
+
+# Archivos generados por la aplicación
+*.pdf
+REPORTE.pdf
+firmaTecnico.png
+firmaCliente.png
+
+# Backups de base de datos
+backups/
+*.sql
+*.dump
+
+# Claude Code configuration
+.claude/

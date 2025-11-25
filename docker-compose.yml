@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL local
+  postgres:
+    image: postgres:15
+    container_name: orden-servicio-db
+    restart: always
+    environment:
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password_local
+      POSTGRES_DB: vega_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backups:/backups  # Para guardar backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev_user -d vega_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Aplicación Node.js (opcional, si quieres correr todo junto)
+  app:
+    build: .
+    container_name: orden-servicio-app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - ./config.env.local  # Usar config local
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app  # Hot reload para desarrollo
+      - /app/node_modules  # Evitar sobrescribir node_modules
+
+volumes:
+  postgres_data:
+    driver: local
