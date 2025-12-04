@@ -1,7 +1,8 @@
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
+import path from 'path';
 // Función para crear el PDF
-function createPDF(create_at, fecha,folio, cliente, telefono,correo, tipoServicio, tipoEquipo, marca, modelo, tecnico, falla, trabajo, partesUtilizadas, repuestoParteUsada, descripParteUsada) {
+function createPDF(create_at, fecha,folio, cliente, telefono,correo, tipoServicio, tipoEquipo, marca, modelo, tecnico, falla, trabajo, partesUtilizadas, repuestoParteUsada, descripParteUsada, modified_at = null, firmaTecnicoPath = null, firmaClientePath = null) {
     const doc = new PDFDocument({ size: 'letter' });
     let eleccionTipoServicio;
   switch (tipoServicio){
@@ -111,7 +112,7 @@ let eleccionMarca;
        .text('FOLIO', 480, 120)
        .fontSize(10)
        .text(folio, 480, 140);
-    
+
        doc.fontSize(12)
        .text('CLIENTE:', 50, 200)
        .fontSize(10)
@@ -179,20 +180,25 @@ let eleccionMarca;
        .text('SE ME INDICÓ EL PROBLEMA DEL EQUIPO Y LA REPARACIÓN DESCRITA EN LA ORDEN DE SERVICIO. SE ME MOSTRARON LAS REFACCIONES NUEVAS A UTILIZARSE QUEDANDO EL EQUIPO FUNCIONANDO Y A MI ENTERA SATISFACCIÓN.:', 100, 520)
       
        doc.fontSize(12)
-       .text('FIRMAS', 280, 570)
+       .text('FIRMAS', 280, 570);
 
-       // Fit the image within the dimensions
-      doc.image('firmaTecnico.png', 155, 620, {fit: [100, 100]})
-      .text('Firma del Técnico', 155, 705);
+       // Firma del técnico
+      if (firmaTecnicoPath && fs.existsSync(firmaTecnicoPath)) {
+        doc.image(firmaTecnicoPath, 155, 620, {fit: [100, 100]});
+      }
+      doc.text('Firma del Técnico', 155, 705);
 
-      doc.image('firmaCliente.png', 365, 620, {fit: [100, 100]})
-      .text('Firma del Cliente', 365, 705);
-  
+      // Firma del cliente
+      if (firmaClientePath && fs.existsSync(firmaClientePath)) {
+        doc.image(firmaClientePath, 365, 620, {fit: [100, 100]});
+      }
+      doc.text('Firma del Cliente', 365, 705);
+
     // Guarda el PDF en un archivo
     const writeStream = fs.createWriteStream('REPORTE.pdf');
     doc.pipe(writeStream);
     doc.end();
-  
+
     console.log('PDF creado correctamente.');
   }
 

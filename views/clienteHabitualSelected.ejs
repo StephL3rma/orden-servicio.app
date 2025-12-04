@@ -24,17 +24,22 @@
               <%= console.log("ID direccion cliente actual es: ",arrayClienteSelected[i].id);%>
               <input type="hidden" name="opcionPresionada" value="<%= i %>">
               <%= console.log("opcion Presionada en clienteHabitual es: ", i);%>
-              
-               <button class="w-100 btn btn-outline-primary btn-sm" style="text-align: left;" type="submit" >Colonia: <%= arrayClienteSelected[i].colonia_localidad %></button> 
+
+               <button class="w-100 btn btn-outline-primary btn-sm" style="text-align: left;" type="submit" >Colonia: <%= arrayClienteSelected[i].colonia_localidad %></button>
               </form>
           <% }%>
-          
+
+          <!-- Botón agregar nueva dirección -->
+          <button class="w-100 btn btn-outline-success btn-sm mt-2" type="button" onclick="limpiarParaNuevaDireccion()">
+            <i class="bi bi-plus-circle"></i> Nueva Dirección
+          </button>
+
             </div>
         
 
 
         <h4 class="py-5 text-center">Cliente Actual: </h4>
-        <form action="guardarOrdenHabitual" method="post">
+        <form id="formPrincipal" action="guardarOrdenHabitual" method="post">
 
 
           
@@ -105,22 +110,144 @@
           <hr class="my-4">
         
           <div class="row g-3">
-            <div class="col-sm-4">
-              <label for="folio" class="form-label"> Folio d Orden: <%= nuevoFolio %></label>
-              <input type="hidden" id="valorLabel" name="nuevoFolio" value=" <%= nuevoFolio %>">
+            <div class="col-sm-3">
+              <label for="folio" class="form-label">Folio: <%= nuevoFolio %></label>
+              <input type="hidden" id="valorLabel" name="nuevoFolio" value="<%= nuevoFolio %>">
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <label for="fecha" class="form-label">Fecha: <%= hoy %></label>
-              <input type="hidden" id="valorLabel" name="valorLabel" value=" <%= hoy %>">
+              <input type="hidden" id="valorLabel" name="valorLabel" value="<%= hoy %>">
             </div>
-            <div class="col-sm-4">
-              <label for="fecha" class="form-label">Estado: Abierto </label>
+            <div class="col-sm-3">
+              <label for="fecha" class="form-label">Estado: Abierto</label>
               <input type="hidden" id="valorLabel" name="estado" value="Abierto">
             </div>
+            <div class="col-sm-3">
+              <label class="form-label">Técnico Asignado</label>
+              <select class="form-select" name="tecnicoAsignado" required>
+                <option value="">Seleccionar técnico</option>
+                <% tecnicos.forEach(tecnico => { %>
+                  <option value="<%= tecnico.id %>"><%= tecnico.username %></option>
+                <% }); %>
+              </select>
+            </div>
           </div>
+
+          <hr class="my-4">
+          <h4 class="mb-3">Información técnica (opcional)</h4>
+          <p class="text-muted">Estos campos son opcionales. El técnico podrá completarlos después.</p>
+
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Tipo de servicio</label>
+              <div class="checkbox mb-3">
+                <label>
+                  <input type="checkbox" name="checkBox[]" value="1"> Recolección<br>
+                  <input type="checkbox" name="checkBox[]" value="2"> Diagnóstico<br>
+                  <input type="checkbox" name="checkBox[]" value="3"> Mantenimiento<br>
+                  <input type="checkbox" name="checkBox[]" value="4"> Puesta en marcha<br>
+                  <input type="checkbox" name="checkBox[]" value="5"> Reparación<br>
+                  <input type="checkbox" name="checkBox[]" value="6"> Instalación<br>
+                  <input type="checkbox" name="checkBox[]" value="7"> Otro<br>
+                </label>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Tipo de Equipo</label>
+              <select class="form-select" name="tipo">
+                <option value="">Selecciona una opción</option>
+                <option value="1">Centro de Lavado</option>
+                <option value="2">Centro de Secado</option>
+                <option value="3">Lavadora</option>
+                <option value="4">Secadora</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Marca</label>
+              <select class="form-select" name="marca">
+                <option value="">Selecciona una opción</option>
+                <option value="1">ADC</option>
+                <option value="2">DANUBE</option>
+                <option value="3">LG</option>
+                <option value="4">MAYTAG</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Modelo</label>
+              <input type="text" class="form-control" name="modelo">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Número de serie</label>
+              <input type="text" class="form-control" name="serie">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Voltaje</label>
+              <input type="number" step="any" class="form-control" name="voltaje">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Amperaje</label>
+              <input type="number" step="any" class="form-control" name="amperaje">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Watts</label>
+              <input type="number" step="any" class="form-control" name="watts">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Presión de agua</label>
+              <input type="number" step="any" class="form-control" name="presion">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Falla reportada</label>
+              <input type="text" class="form-control" name="fallaReportada">
+            </div>
+          </div>
+
           <br>
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Guardar</button>
+          <input type="hidden" name="accion" id="accionInput" value="orden">
+          <button class="w-100 btn btn-success btn-lg mb-2" type="button" onclick="guardarSoloDireccion()" id="btnSoloDireccion" style="display:none;">
+            <i class="bi bi-geo-alt"></i> Guardar Solo Dirección
+          </button>
+          <button class="w-100 btn btn-primary btn-lg" type="submit" id="btnGuardarOrden">Guardar Orden</button>
         </form>
+
+        <script>
+          function limpiarParaNuevaDireccion() {
+            // Limpiar solo campos de dirección (cliente NO se modifica)
+            document.querySelector('input[name="calle"]').value = '';
+            document.querySelector('input[name="numeroInterior"]').value = '';
+            document.querySelector('input[name="Colonia"]').value = '';
+            document.querySelector('input[name="cPostal"]').value = '';
+            document.querySelector('input[name="telefono"]').value = '';
+            document.querySelector('input[name="referencia"]').value = '';
+
+            // Resaltar campos de dirección que se pueden llenar
+            document.querySelector('input[name="calle"]').style.backgroundColor = '#d1ecf1';
+            document.querySelector('input[name="Colonia"]').style.backgroundColor = '#d1ecf1';
+
+            // Mostrar botón de guardar solo dirección
+            document.getElementById('btnSoloDireccion').style.display = 'block';
+            document.getElementById('btnGuardarOrden').textContent = 'Guardar Orden Completa';
+
+            // Scroll al formulario
+            document.getElementById('formPrincipal').scrollIntoView({ behavior: 'smooth' });
+          }
+
+          function guardarSoloDireccion() {
+            const form = document.getElementById('formPrincipal');
+            document.getElementById('accionInput').value = 'direccion';
+            form.action = 'agregarDireccion';
+            form.submit();
+          }
+        </script>
       </div>
     </div>
   </main>

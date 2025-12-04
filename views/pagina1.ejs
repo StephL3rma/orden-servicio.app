@@ -15,10 +15,6 @@
               <label for="nombreCliente" class="form-label">Nombre del Cliente</label>
               <input type="text" class="form-control" name="nombreCliente" placeholder="" value="" required> <!--oninvalid="this.setCustomValidity('Este campo es requerido')"  no permite rellenar el campo una vez el error sale-->
             </div>
-            <div class="col-12">
-              <label for="idCliente" class="form-label" style="color: #14a396;">Id de Cliente: <%= nuevoCliente %></label>
-              <input type="hidden" class="form-control" name="idCliente" value="<%= nuevoCliente %>">
-            </div>
           
             <div class="col-12">
               <label for="correo" class="form-label">Correo Electrónico</label>
@@ -76,19 +72,107 @@
           <hr class="my-4">
         
           <div class="row g-3">
-            <div class="col-sm-4">
-              <label class="form-label"> Folio d Orden: <%= nuevoFolio %></label>
-              <input type="hidden" name="nuevoFolio" value=" <%= nuevoFolio %>">
+            <div class="col-sm-3">
+              <label class="form-label">Folio: <%= nuevoFolio %></label>
+              <input type="hidden" name="nuevoFolio" value="<%= nuevoFolio %>">
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <label class="form-label">Fecha: <%= hoy %></label>
-              <input type="hidden" name="valorLabel" value=" <%= hoy %>">
+              <input type="hidden" name="valorLabel" value="<%= hoy %>">
             </div>
-            <div class="col-sm-4">
-              <label class="form-label">Estado: Abierto </label>
+            <div class="col-sm-3">
+              <label class="form-label">Estado: Abierto</label>
               <input type="hidden" name="estado" value="Abierto">
             </div>
+            <div class="col-sm-3">
+              <label class="form-label">Técnico Asignado</label>
+              <select class="form-select" name="tecnicoAsignado" required>
+                <option value="">Seleccionar técnico</option>
+                <% tecnicos.forEach(tecnico => { %>
+                  <option value="<%= tecnico.id %>"><%= tecnico.username %></option>
+                <% }); %>
+              </select>
+            </div>
           </div>
+
+          <hr class="my-4">
+          <h4 class="mb-3">Información técnica (opcional)</h4>
+          <p class="text-muted">Estos campos son opcionales. El técnico podrá completarlos después.</p>
+
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Tipo de servicio</label>
+              <div class="checkbox mb-3">
+                <label>
+                  <input type="checkbox" name="checkBox[]" value="1"> Recolección<br>
+                  <input type="checkbox" name="checkBox[]" value="2"> Diagnóstico<br>
+                  <input type="checkbox" name="checkBox[]" value="3"> Mantenimiento<br>
+                  <input type="checkbox" name="checkBox[]" value="4"> Puesta en marcha<br>
+                  <input type="checkbox" name="checkBox[]" value="5"> Reparación<br>
+                  <input type="checkbox" name="checkBox[]" value="6"> Instalación<br>
+                  <input type="checkbox" name="checkBox[]" value="7"> Otro<br>
+                </label>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Tipo de Equipo</label>
+              <select class="form-select" name="tipo">
+                <option value="">Selecciona una opción</option>
+                <option value="1">Centro de Lavado</option>
+                <option value="2">Centro de Secado</option>
+                <option value="3">Lavadora</option>
+                <option value="4">Secadora</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Marca</label>
+              <select class="form-select" name="marca">
+                <option value="">Selecciona una opción</option>
+                <option value="1">ADC</option>
+                <option value="2">DANUBE</option>
+                <option value="3">LG</option>
+                <option value="4">MAYTAG</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Modelo</label>
+              <input type="text" class="form-control" name="modelo">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Número de serie</label>
+              <input type="text" class="form-control" name="serie">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Voltaje</label>
+              <input type="number" step="any" class="form-control" name="voltaje">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Amperaje</label>
+              <input type="number" step="any" class="form-control" name="amperaje">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Watts</label>
+              <input type="number" step="any" class="form-control" name="watts">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Presión de agua</label>
+              <input type="number" step="any" class="form-control" name="presion">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Falla reportada</label>
+              <input type="text" class="form-control" name="fallaReportada">
+            </div>
+          </div>
+
           <br>
           <button class="w-100 btn btn-primary btn-lg" type="submit">Guardar</button>
         </form>

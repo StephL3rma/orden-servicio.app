@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orden #<%= orden.folio %> - Detalle</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .foto-thumbnail {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+        .foto-thumbnail:hover {
+            transform: scale(1.05);
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <%- include('./partials/header.ejs', { mostrarBoton3: false }) %>
+
+    <div class="container mt-4">
+        <!-- Encabezado -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h2>
+                            <i class="bi bi-file-earmark-text"></i>
+                            Orden de Servicio #<%= orden.folio %>
+                        </h2>
+                        <p class="text-muted mb-0">
+                            Creada: <%= orden.fecha_creacion %> |
+                            Servicio: <%= orden.fecha_servicio || 'Pendiente' %> |
+                            <span class="badge <%= orden.estado === 'completada' ? 'bg-success' : 'bg-warning' %>">
+                                <%= orden.estado %>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="text-end">
+                        <form action="/historial" method="POST" style="display: inline;">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-arrow-left"></i> Volver
+                            </button>
+                        </form>
+                        <% if (orden.estado === 'completada') { %>
+                        <button class="btn btn-primary btn-sm" onclick="regenerarPDF()">
+                            <i class="bi bi-file-pdf"></i> PDF
+                        </button>
+                        <% if (userRole === 1) { %>
+                        <form action="/verCambios" method="POST" style="display: inline;">
+                            <input type="hidden" name="ordenId" value="<%= orden.folio %>">
+                            <button type="submit" class="btn btn-warning btn-sm">
+                                <i class="bi bi-arrow-left-right"></i> Cambios
+                            </button>
+                        </form>
+                        <% } %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Columna Izquierda: Datos de la Orden -->
+            <div class="col-md-6">
+                <!-- Datos del Cliente -->
+                <div class="card mb-3">
+                    <div class="card-header bg-info text-white">
+                        <i class="bi bi-person-badge"></i>
+                        Datos del Cliente
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Nombre:</strong> <%= orden.cliente_nombre || 'N/A' %></p>
+                        <p><strong>Email:</strong> <%= orden.cliente_email || 'N/A' %></p>
+                        <p><strong>RFC:</strong> <%= orden.cliente_rfc || 'N/A' %></p>
+                        <p><strong>Teléfono:</strong> <%= orden.cliente_telefono || 'N/A' %></p>
+                    </div>
+                </div>
+
+                <!-- Datos del Equipo -->
+                <div class="card mb-3">
+                    <div class="card-header bg-secondary text-white">
+                        <i class="bi bi-gear"></i> Datos del Equipo
+                    </div>
+                    <div class="card-body">
+                        <% const pendienteMsg = orden.estado !== 'completada' ? 'Pendiente de completar' : 'N/A'; %>
+                        <p><strong>Tipo:</strong> <%= orden.nombre_tipo_equipo || pendienteMsg %></p>
+                        <p><strong>Marca:</strong> <%= orden.nombre_marca || pendienteMsg %></p>
+                        <p><strong>Modelo:</strong> <%= orden.modelo || pendienteMsg %></p>
+                        <p><strong>Serie:</strong> <%= orden.serie || pendienteMsg %></p>
+                        <% if (orden.volts || orden.amperes || orden.watts) { %>
+                        <p><strong>Especificaciones:</strong>
+                            <%= orden.volts ? orden.volts + 'V' : '' %>
+                            <%= orden.amperes ? ' | ' + orden.amperes + 'A' : '' %>
+                            <%= orden.watts ? ' | ' + orden.watts + 'W' : '' %>
+                        </p>
+                        <% } else if (orden.estado === 'completada') { %>
+                        <p><strong>Especificaciones:</strong> N/A</p>
+                        <% } %>
+                        <% if (orden.presion_agua) { %>
+                        <p><strong>Presión de agua:</strong> <%= orden.presion_agua %></p>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Tipos de Servicio -->
+                <% if (tiposServicio && tiposServicio.length > 0) { %>
+                <div class="card mb-3">
+                    <div class="card-header bg-primary text-white">
+                        <i class="bi bi-list-check"></i> Tipos de Servicio
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <% tiposServicio.forEach(ts => { %>
+                            <li><%= ts.tipo_servicio %></li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                </div>
+                <% } else if (orden.estado !== 'completada') { %>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> Los tipos de servicio se asignarán cuando el técnico complete la orden.
+                </div>
+                <% } %>
+
+                <!-- Piezas Dañadas -->
+                <% if (piezas && piezas.length > 0 && piezas[0].no_parte) { %>
+                <div class="card mb-3">
+                    <div class="card-header bg-warning">
+                        <i class="bi bi-wrench"></i> Piezas Utilizadas
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>No. Parte</th>
+                                    <th>Cantidad</th>
+                                    <th>Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% piezas.forEach(p => { %>
+                                <% if (p.no_parte) { %>
+                                <tr>
+                                    <td><%= p.no_parte %></td>
+                                    <td><%= p.cantidad %></td>
+                                    <td><%= p.descripcion %></td>
+                                </tr>
+                                <% } %>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+
+            <!-- Columna Derecha: Descripción y Archivos -->
+            <div class="col-md-6">
+                <!-- Descripción de Falla y Trabajo -->
+                <div class="card mb-3">
+                    <div class="card-header bg-danger text-white">
+                        <i class="bi bi-exclamation-triangle"></i> Descripción de Falla
+                    </div>
+                    <div class="card-body">
+                        <% if (orden.descripcion_falla) { %>
+                        <p><%= orden.descripcion_falla %></p>
+                        <% } else { %>
+                        <p class="text-muted fst-italic">
+                            <%= orden.estado !== 'completada' ? 'Pendiente: El técnico registrará la descripción de la falla.' : 'No se registró descripción de falla.' %>
+                        </p>
+                        <% } %>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header bg-success text-white">
+                        <i class="bi bi-clipboard-check"></i> Trabajo Realizado
+                    </div>
+                    <div class="card-body">
+                        <% if (orden.trabajo_realizado) { %>
+                        <p><%= orden.trabajo_realizado %></p>
+                        <% } else { %>
+                        <p class="text-muted fst-italic">
+                            <%= orden.estado !== 'completada' ? 'Pendiente: El técnico registrará el trabajo realizado.' : 'No se registró trabajo realizado.' %>
+                        </p>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Comentarios Adicionales -->
+                <% if (orden.comentarios || orden.modified_fields) { %>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <i class="bi bi-chat-left-text"></i> Comentarios Adicionales
+                    </div>
+                    <div class="card-body">
+                        <% if (orden.comentarios) { %>
+                        <p><%= orden.comentarios %></p>
+                        <% } %>
+
+                        <!-- Mostrar cambios si la orden fue modificada -->
+                        <% if (orden.modified_fields) { %>
+                            <hr>
+                            <div class="alert alert-warning mb-0">
+                                <h6 class="alert-heading">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                    Orden Modificada Después de Completada
+                                </h6>
+                                <p class="mb-2">
+                                    <strong>Fecha:</strong> <%= new Date(orden.modified_at).toLocaleString('es-MX') %>
+                                </p>
+                                <p class="mb-0">
+                                    <strong>Cambios realizados:</strong><br>
+                                    <%= orden.modified_fields.split(' | ').join('<br>') %>
+                                </p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                <% } %>
+
+                <!-- Galería de Fotos -->
+                <% if (fotos && fotos.length > 0) { %>
+                <div class="card mb-3">
+                    <div class="card-header bg-dark text-white">
+                        <i class="bi bi-images"></i> Fotos (<%= fotos.length %>)
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <% fotos.forEach((foto, index) => { %>
+                            <div class="col-md-6 mb-3">
+                                <img
+                                    src="/<%= foto.ruta %>"
+                                    alt="<%= foto.nombre_original %>"
+                                    class="foto-thumbnail"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalFoto<%= index %>"
+                                >
+                                <small class="text-muted d-block mt-1">
+                                    <%= foto.nombre_original %>
+                                </small>
+                            </div>
+
+                            <!-- Modal para ver foto en grande -->
+                            <div class="modal fade" id="modalFoto<%= index %>" tabindex="-1">
+                                <div class="modal-dialog modal-lg modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title"><%= foto.nombre_original %></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <img src="/<%= foto.ruta %>" class="img-fluid" alt="<%= foto.nombre_original %>">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                </div>
+                <% } else { %>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    <%= orden.estado !== 'completada' ? 'Las fotos se agregarán cuando el técnico complete la orden.' : 'No hay fotos adjuntas a esta orden.' %>
+                </div>
+                <% } %>
+
+                <!-- Videos -->
+                <% if (videos && videos.length > 0) { %>
+                <div class="card mb-3">
+                    <div class="card-header bg-dark text-white">
+                        <i class="bi bi-camera-video"></i> Videos (<%= videos.length %>)
+                    </div>
+                    <div class="card-body">
+                        <% videos.forEach(video => { %>
+                        <div class="mb-3">
+                            <h6><%= video.nombre_original %></h6>
+                            <div class="video-container">
+                                <video controls>
+                                    <source src="/<%= video.ruta %>" type="video/mp4">
+                                    Tu navegador no soporta el elemento de video.
+                                </video>
+                            </div>
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function regenerarPDF() {
+            const folio = '<%= orden.folio %>';
+            window.location.href = `/regenerar-pdf/${folio}`;
+        }
+    </script>
+</body>
+</html>

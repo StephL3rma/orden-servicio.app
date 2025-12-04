@@ -26,19 +26,29 @@ document.getElementById('clearCliente').addEventListener('click', () => {
 document.getElementById('saveAll').addEventListener('click', () => {
   const signatureCliente = signaturePadCliente.toDataURL();
   const signatureTecnico = signaturePadTecnico.toDataURL();
-  //document.getElementById('signature-img').src = signature;
+
+  // Obtener el folio de la página
+  const folioInput = document.querySelector('input[name="folio"]');
+  const folio = folioInput ? folioInput.value : null;
+
+  if (!folio) {
+    console.error('No se encontró el folio');
+    return;
+  }
+
   const firmas = {
     firmaCliente: signatureCliente,
     firmaTecnico: signatureTecnico,
+    folio: folio
   };
 
   // Envía la firma al servidor
-  fetch('/guardar-firmas', { //enviarOrden
+  fetch('/guardar-firmas', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(firmas), //envio de cadena json para ser usado con req.body en post /guardar-firmas
+    body: JSON.stringify(firmas),
   })
   .then((response) => response.text())
   .then((message) => console.log(message))

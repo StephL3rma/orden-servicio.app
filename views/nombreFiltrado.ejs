@@ -1,17 +1,17 @@
 <%-include("./partials/header.ejs", { mostrarBoton3: false })%>
 <div>
   <form action="buscarCliente" method="post">
-    <div class="col-sm-4" >
+    <div class="col-sm-6" >
     <div class="input-group">
   <input type="text" class="form-control" name="filtro" placeholder="Inserte Nombre, Correo o RFC">
   <span class="input-group-btn"></span>
   <button type="submit" class="btn btn-outline-primary btn-sm" name="filtro">Filtrar</button>
-</div> 
+</div>
 </div>
 </form>
 
 </div>
-
+<br>
     <table class="table">
         <thead>
           <tr>
@@ -32,7 +32,7 @@
                 <td><%= cliente[i].nombre %></td>
                 <td><%= cliente[i].rfc %></td>
                 <td><%= cliente[i].email %></td>
-                <td><button name="clienteSelecButton" value="<%= cliente[0].id %>">Usar</button></td>
+                <td><button name="clienteSelecButton" value="<%= cliente[i].id %>" class="w-100 btn btn-outline-primary btn-sm">Usar</button></td>
               </tr>
             </form>
             <%}%>

@@ -1,34 +1,106 @@
-<%-include("./partials/header.ejs", { mostrarBoton3:false })%>
-<p>Ordenes Pendientes</p>
-<h3  style="color: #1b8dd0;"> Técnico: <%=usuario%></h3>
-<br>
-   <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Fecha Día-Mes-Año</th>
-        <th scope="col">Folio</th>
-        <th scope="col">Cliente</th>
-        <th scope="col">Estatus</th>
-        <th scope="col">Seguimiento</th>
-      </tr>
-    </thead>
-    <tbody>
-        <% let a= totalFilas;%>
-        <% for(let i=0; i < a; i++){%>
-          <form action="seguimiento" method="post">
-            <input type="hidden" name="usuario" value="<%=usuario%>">
-            <tr>
-                <!-- <th scope="row">1</th> -->
-                <td><%= historialPendientes[i].create_at %></td>
-                <td><%= historialPendientes[i].id %></td>
-                <td><%= historialPendientes[i].nombre%></td>
-                <td><%= historialPendientes[i].estado%></td>
-                <td><button name="seguimiento" value="<%= JSON.stringify(historialPendientes[i])%>" class="w-100 btn btn-outline-primary btn-sm" >Hacer</button></td>
-              </tr>
-            </form>
-        <% } %>
+<%-include("./partials/header.ejs", { mostrarBoton3:true })%>
 
-    </tbody>
-  </table>
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2><i class="bi bi-person-badge"></i> Técnico: <span style="color: #0a7ea4;"><%=usuario%></span></h2>
+        </div>
+    </div>
+
+    <!-- Tabs para Abiertas/Completadas -->
+    <ul class="nav nav-tabs mb-3" id="ordenesTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="abiertas-tab" data-bs-toggle="tab" data-bs-target="#abiertas" type="button">
+                <i class="bi bi-hourglass-split"></i> Órdenes Abiertas
+                <span class="badge bg-warning text-dark"><%= totalAbiertas %></span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="completadas-tab" data-bs-toggle="tab" data-bs-target="#completadas" type="button">
+                <i class="bi bi-check-circle"></i> Órdenes Completadas
+                <span class="badge bg-success"><%= totalCompletadas %></span>
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="ordenesTabContent">
+        <!-- Tab Órdenes Abiertas -->
+        <div class="tab-pane fade show active" id="abiertas">
+            <% if (totalAbiertas === 0) { %>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No tienes órdenes abiertas asignadas.
+                </div>
+            <% } else { %>
+                <table class="table table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Folio</th>
+                            <th>Cliente</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% historialAbiertas.forEach(orden => { %>
+                            <tr>
+                                <td><%= orden.create_at %></td>
+                                <td><strong>#<%= orden.id %></strong></td>
+                                <td><%= orden.nombre %></td>
+                                <td><span class="badge bg-warning text-dark"><%= orden.estado %></span></td>
+                                <td>
+                                    <form action="seguimiento" method="post" style="display:inline;">
+                                        <input type="hidden" name="usuario" value="<%=usuario%>">
+                                        <button name="seguimiento" value='<%= JSON.stringify(orden) %>' class="btn btn-sm btn-primary">
+                                            <i class="bi bi-play-circle"></i> Trabajar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } %>
+        </div>
+
+        <!-- Tab Órdenes Completadas -->
+        <div class="tab-pane fade" id="completadas">
+            <% if (totalCompletadas === 0) { %>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> Aún no has completado ninguna orden.
+                </div>
+            <% } else { %>
+                <table class="table table-hover">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Fecha Creación</th>
+                            <th>Fecha Cierre</th>
+                            <th>Folio</th>
+                            <th>Cliente</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% historialCompletadas.forEach(orden => { %>
+                            <tr>
+                                <td><%= orden.create_at %></td>
+                                <td><%= orden.fecha_servicio || 'N/A' %></td>
+                                <td><strong>#<%= orden.id %></strong></td>
+                                <td><%= orden.nombre %></td>
+                                <td><span class="badge bg-success"><%= orden.estado %></span></td>
+                                <td>
+                                    <a href="/orden/<%= orden.id %>" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Ver
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } %>
+        </div>
+    </div>
+</div>
 
 <%-include("./partials/footer.ejs")%>

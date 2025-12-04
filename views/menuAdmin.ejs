@@ -1,35 +1,96 @@
 <%-include("./partials/header.ejs", { mostrarBoton3: false }) %>
-          <p class="lead">Menú</p>
+          <p class="lead">Menú Principal</p>
         </div>
 
-        <div class="py-5">
-            <form action="historial" method="post">
-            <button class="w-100 btn btn-outline-primary btn-lg" type="submit"> <!-- Historial (Cerrados, pendientes y modificar)-->
-                Historial de Ordenes
-            </button>
-            </form>
-        </div>
-        <div class="py-5">
-            <form action="crearHabitual" method="post">
-                <button class="w-100 btn btn-outline-primary btn-lg" type="submit">
-                    Crear orden con cliente habitual
-                </button>
-            </form>
-        </div>
+        <style>
+          .menu-card {
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+          }
+          .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+          }
+          .menu-card .card-body {
+            padding: 2rem;
+          }
+          .menu-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #035277;
+          }
+          .menu-btn {
+            border: none;
+            background: none;
+            text-align: center;
+            width: 100%;
+            padding: 0;
+          }
+          .menu-card-historial { border-left: 5px solid #0dcaf0; }
+          .menu-card-habitual { border-left: 5px solid #198754; }
+          .menu-card-nuevo { border-left: 5px solid #fd7e14; }
+          .menu-card-usuario { border-left: 5px solid #6f42c1; }
+        </style>
 
-        <div class="py-5">
-            <form action="crear" method="post">
-                <button class="w-100 btn btn-outline-primary btn-lg" type="submit">
-                    Crear orden con cliente nuevo
-                </button>
-            </form>
-        </div>
-         <div class="py-5">
-            <form action="crearUsuario" method="post">
-                <button class="w-100 btn btn-outline-primary btn-lg" type="submit">
-                    Crear Usuario Administrador o Técnico
-                </button>
-            </form>
+        <div class="row g-4 py-3">
+            <div class="col-md-6">
+                <form action="historial" method="post">
+                    <button class="menu-btn" type="submit">
+                        <div class="card menu-card menu-card-historial">
+                            <div class="card-body">
+                                <i class="bi bi-clock-history menu-icon"></i>
+                                <h4 class="card-title">Historial de Órdenes</h4>
+                                <p class="text-muted">Ver órdenes cerradas, pendientes y modificar</p>
+                            </div>
+                        </div>
+                    </button>
+                </form>
+            </div>
+
+            <div class="col-md-6">
+                <form action="crearHabitual" method="post">
+                    <button class="menu-btn" type="submit">
+                        <div class="card menu-card menu-card-habitual">
+                            <div class="card-body">
+                                <i class="bi bi-person-check menu-icon"></i>
+                                <h4 class="card-title">Cliente Habitual</h4>
+                                <p class="text-muted">Crear orden con cliente existente</p>
+                            </div>
+                        </div>
+                    </button>
+                </form>
+            </div>
+
+            <div class="col-md-6">
+                <form action="crear" method="post">
+                    <button class="menu-btn" type="submit">
+                        <div class="card menu-card menu-card-nuevo">
+                            <div class="card-body">
+                                <i class="bi bi-person-plus menu-icon"></i>
+                                <h4 class="card-title">Cliente Nuevo</h4>
+                                <p class="text-muted">Crear orden con cliente nuevo</p>
+                            </div>
+                        </div>
+                    </button>
+                </form>
+            </div>
+
+            <div class="col-md-6">
+                <form action="crearUsuario" method="post">
+                    <button class="menu-btn" type="submit">
+                        <div class="card menu-card menu-card-usuario">
+                            <div class="card-body">
+                                <i class="bi bi-person-gear menu-icon"></i>
+                                <h4 class="card-title">Crear Usuario</h4>
+                                <p class="text-muted">Administrador o Técnico</p>
+                            </div>
+                        </div>
+                    </button>
+                </form>
+            </div>
         </div>
 
 <%-include("./partials/footer.ejs") %>

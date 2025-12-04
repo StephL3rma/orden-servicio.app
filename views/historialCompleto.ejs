@@ -17,13 +17,14 @@
 
 </div>
 <br>
-   <table class="table">
-    <thead>
+   <table class="table table-hover">
+    <thead class="table-dark">
       <tr>
         <th scope="col">Fecha Día-Mes-Año</th>
         <th scope="col">Folio</th>
         <th scope="col">Cliente</th>
-        <th scope="col">Seguimiento</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -34,7 +35,16 @@
                 <td><%= historial[a].create_at %></td>
                 <td><%= historial[a].id %></td>
                 <td><%= historial[a].nombre%></td>
-                <td><%= historial[a].estado%></td>
+                <td>
+                    <span class="badge <%= historial[a].estado === 'completada' ? 'bg-success' : 'bg-warning' %>">
+                        <%= historial[a].estado%>
+                    </span>
+                </td>
+                <td>
+                    <a href="/orden/<%= historial[a].id %>" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-eye"></i> Ver Detalle
+                    </a>
+                </td>
               </tr>
         <% } %>
 

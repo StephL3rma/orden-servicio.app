@@ -20,15 +20,15 @@
           <input type="hidden" class="form-control" name="idCliente" value="<%= idCliente%>"> 
           <input type="hidden" class="form-control" name="create_at" value="<%= create_at%>"> 
           <!-- fin cola de historialPendientes.ejs valores seleccionados -->
-            <div class="checkbox mb-3"> 
-             <label >
-               <input type="checkbox" name="checkBox[]" value="1" > Recolección <br>
-               <input type="checkbox" name="checkBox[]" value="2" > Diagnóstico <br>
-               <input type="checkbox" name="checkBox[]" value="3" > Mantenimiento <br>
-               <input type="checkbox" name="checkBox[]" value="4" > Puesta en marcha <br>
-               <input type="checkbox" name="checkBox[]" value="5" > Reparación <br>
-               <input type="checkbox" name="checkBox[]" value="6" > Instalación <br>
-               <input type="checkbox" name="checkBox[]" value="7" > Otro <br>
+            <div class="checkbox mb-3">
+             <label>
+               <input type="checkbox" name="checkBox[]" value="1" <%= tiposSeleccionados.map(String).includes('1') ? 'checked' : '' %>> Recolección <br>
+               <input type="checkbox" name="checkBox[]" value="2" <%= tiposSeleccionados.map(String).includes('2') ? 'checked' : '' %>> Diagnóstico <br>
+               <input type="checkbox" name="checkBox[]" value="3" <%= tiposSeleccionados.map(String).includes('3') ? 'checked' : '' %>> Mantenimiento <br>
+               <input type="checkbox" name="checkBox[]" value="4" <%= tiposSeleccionados.map(String).includes('4') ? 'checked' : '' %>> Puesta en marcha <br>
+               <input type="checkbox" name="checkBox[]" value="5" <%= tiposSeleccionados.map(String).includes('5') ? 'checked' : '' %>> Reparación <br>
+               <input type="checkbox" name="checkBox[]" value="6" <%= tiposSeleccionados.map(String).includes('6') ? 'checked' : '' %>> Instalación <br>
+               <input type="checkbox" name="checkBox[]" value="7" <%= tiposSeleccionados.map(String).includes('7') ? 'checked' : '' %>> Otro <br>
              </label>
             </div>
             
@@ -37,52 +37,53 @@
             <div class="col-md-4">
               <label for="state" class="form-label">Tipo de Equipo</label>
               <select class="form-select" id="Tipo" name="tipo">
-                <option disabled selected>Selecciona una opción</option>
-                <option value="1">CENTRO DE LAVADO</option>
-                <option value="2">CENTRO DE SECADO</option>
-                <option value="3">SENCILLA</option>
+                <option value="" <%= !orden.id_tipo_equipo ? 'selected' : '' %>>Selecciona una opción</option>
+                <option value="1" <%= orden.id_tipo_equipo == 1 ? 'selected' : '' %>>Centro de Lavado</option>
+                <option value="2" <%= orden.id_tipo_equipo == 2 ? 'selected' : '' %>>Centro de Secado</option>
+                <option value="3" <%= orden.id_tipo_equipo == 3 ? 'selected' : '' %>>Lavadora</option>
+                <option value="4" <%= orden.id_tipo_equipo == 4 ? 'selected' : '' %>>Secadora</option>
               </select>
             </div>
 
             <div class="col-md-4">
               <label for="state" class="form-label">Marca</label>
               <select class="form-select" id="Marca" name="marca">
-                <option disabled selected>Selecciona una opción</option>
-                <option value="1">ADC</option>
-                <option value="2">DANUBE</option>
-                <option value="3">LG</option>
-                <option value="4">MYTAG</option>
+                <option value="" <%= !orden.id_marca ? 'selected' : '' %>>Selecciona una opción</option>
+                <option value="1" <%= orden.id_marca == 1 ? 'selected' : '' %>>ADC</option>
+                <option value="2" <%= orden.id_marca == 2 ? 'selected' : '' %>>DANUBE</option>
+                <option value="3" <%= orden.id_marca == 3 ? 'selected' : '' %>>LG</option>
+                <option value="4" <%= orden.id_marca == 4 ? 'selected' : '' %>>MAYTAG</option>
               </select>
             </div>
 
             <div class="col-md-3">
               <label for="Modelo" class="form-label">Modelo</label>
-              <input type="text" class="form-control" name="modelo">
+              <input type="text" class="form-control" name="modelo" value="<%= orden.modelo || '' %>">
             </div>
 
             <div class="col-md-3">
               <label for="" class="form-label">Número de serie</label>
-              <input type="" class="form-control" id="serie" name="serie" placeholder="">
+              <input type="text" class="form-control" id="serie" name="serie" value="<%= orden.serie || '' %>">
             </div>
 
             <div class="col-md-3">
               <label for="" class="form-label">Voltaje</label>
-              <input type="number" step="any" inputmode="decimal" pattern="[0-9]*" class="form-control" id="voltaje" name="voltaje">
+              <input type="number" step="any" inputmode="decimal" pattern="[0-9]*" class="form-control" id="voltaje" name="voltaje" value="<%= orden.volts || '' %>">
             </div>
 
             <div class="col-md-3">
               <label for="" class="form-label">Amperaje</label>
-              <input type="number" step="any" inputmode="decimal" pattern="[0-9]*" class="form-control" name="amperaje">
+              <input type="number" step="any" inputmode="decimal" pattern="[0-9]*" class="form-control" name="amperaje" value="<%= orden.amperes || '' %>">
             </div>
 
             <div class="col-md-3">
-              <label for="" class="form-label">Watss</label>
-              <input type="number" step="any" inputmode="decimal" pattern="[0-9]*" class="form-control" name="watts">
+              <label for="" class="form-label">Watts</label>
+              <input type="number" step="any" inputmode="decimal" pattern="[0-9]*" class="form-control" name="watts" value="<%= orden.watts || '' %>">
             </div>
 
             <div class="col-md-3">
               <label for="" class="form-label">Presion de agua</label>
-              <input type="number" step="any" inputmode="decimal" pattern="[0-9]*"  class="form-control" name="presion">
+              <input type="number" step="any" inputmode="decimal" pattern="[0-9]*"  class="form-control" name="presion" value="<%= orden.presion_agua || '' %>">
             </div>
 
             <h4 class="mb-3">Detalles de la orden de servicio</h4>
@@ -95,7 +96,7 @@
 
             <div class="col-12">
               <label for="" class="form-label">Falla reportada</label>
-              <input type="" class="form-control" name="fallas">
+              <input type="text" class="form-control" name="fallas" value="<%= orden.descripcion_falla || '' %>">
             </div>
 
             <div class="col-12">
